@@ -25,7 +25,7 @@ def socket_service():
     except socket.error as msg:
         print(msg)
         sys.exit(1)
-    print ('The server is runnnig already, waiting for connection...')
+    print ('The server is runnnig already,waiting for connection...')
 
     while 1:
         conn, addr = s.accept()
@@ -41,6 +41,30 @@ def deal_data(conn, addr):
     conn.send(welcomeSentence.encode())
 
     while 1:
+
+        filepath = conn.recv(1024).decode()
+        if os.path.isfile(filepath):
+            # 定义定义文件信息。128s表示文件名为128bytes长，l表示一个int或log文件类型，在此为文件大小
+            fileinfo_size = struct.calcsize('128sl')
+            # 定义文件头信息，包含文件名和文件大小
+            # 定义文件头信息，包含文件名和文件大小
+            #os.path.basename返回path最后的文件名
+            #os.stat(filepath).st_size:普通文件以字节为单位的大小
+            fhead = struct.pack('128sl', os.path.basename(filepath).encode(),
+                                os.stat(filepath).st_size)
+            conn.send(fhead)
+            print ('File sending start...' )
+            fp = open(filepath, 'rb')
+            while 1:
+                data = fp.read(1024)
+                if not data:
+                    print ('File sending over...')
+                    print ('The Server is idle, waiting for connection...')
+                    break
+                conn.send(data)
+        conn.close()
+        break
+
         #计算占用的字节数
         fileinfo_size = struct.calcsize('128sl')
         buf = conn.recv(fileinfo_size)
@@ -69,8 +93,6 @@ def deal_data(conn, addr):
             print ('end receive...' )
         conn.close()
         break
-
-    print('program finished')
 
 
 if __name__ == '__main__':
