@@ -1,0 +1,4 @@
+﻿  UDPClient.cpp
+d:\大三学习资料\junior_study\计网实验\lab2\udpclient\udpclient\udpclient.cpp(31): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\10\include\10.0.16299.0\um\winsock2.h(1830): note: 参见“inet_addr”的声明
+  UDPClient.vcxproj -> D:\大三学习资料\Junior_study\计网实验\lab2\UDPClient\Debug\UDPClient.exe
